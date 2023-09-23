@@ -1,0 +1,1 @@
+// Splash Screen with Animation
