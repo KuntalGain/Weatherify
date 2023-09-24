@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
   // background Color as per Weather Condition
@@ -7,11 +8,12 @@ class AppTheme {
   static const Color stormyColor = Color(0xff5f859a);
 
   // Text Styles
-  static const TextStyle temperature = TextStyle(
+  static TextStyle temperature = GoogleFonts.overpass(
+      textStyle: const TextStyle(
     fontSize: 100,
     fontWeight: FontWeight.w400,
     color: Colors.white,
-  );
+  ));
   static const TextStyle date = TextStyle(
     fontSize: 18,
     fontWeight: FontWeight.w400,
