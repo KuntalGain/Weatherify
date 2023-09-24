@@ -5,6 +5,7 @@ import 'package:weatherify/constants/theme.dart';
 import 'package:weatherify/presentation/widgets/forcast_btn.dart';
 import 'package:weatherify/presentation/widgets/weather_card.dart';
 import 'package:weatherify/presentation/widgets/weather_condition.dart';
+import 'package:weatherify/presentation/widgets/bottom_sheet.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -15,6 +16,44 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   String weatherCondition = "Sunny";
+
+  void _showNotificationBottomSheet() {
+    showModalBottomSheet<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          height: 490,
+          // Customize your bottom sheet content here
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              const Text(
+                'Your Notifications',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.w900,
+                ),
+              ),
+              // Add your notification content here
+              Expanded(
+                  child: ListView.builder(
+                itemCount: 3,
+                itemBuilder: (ctx, idx) {
+                  return Container(
+                    height: 90,
+                    margin: EdgeInsets.all(12),
+                    color: Colors.black,
+                  );
+                },
+              )),
+            ],
+          ),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,15 +86,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                 // notification
                 GestureDetector(
-                  onTap: () {
-                    showBottomSheet(
-                      context: context,
-                      builder: (ctx) => Container(
-                        height: 200,
-                        color: Colors.deepPurple,
-                      ),
-                    );
-                  },
+                  onTap: _showNotificationBottomSheet,
                   child: Image.asset(
                     'assets/bell.png',
                     color: Colors.white,
