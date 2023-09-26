@@ -1,17 +1,23 @@
- // ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors
 
- // ignore: unused_import
- import 'package:flutter/material.dart';
+// ignore: unused_import
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
+import 'package:weatherify/domain/bloc/weather_bloc.dart';
 import 'package:weatherify/presentation/screens/home_screen.dart';
- class SplashScreenController  extends GetxController{
-  static SplashScreenController get find => Get.find();
- RxBool animate = false.obs;
 
- Future startAnimation() async {
-await Future.delayed(Duration(milliseconds: 500));
-animate.value =true;
-await Future.delayed(Duration(milliseconds: 5000));
-Get.to(homescreen());
- }
- }
+class SplashScreenController extends GetxController {
+  static SplashScreenController get find => Get.find();
+  RxBool animate = false.obs;
+
+  Future startAnimation() async {
+    await Future.delayed(Duration(milliseconds: 500));
+    animate.value = true;
+    await Future.delayed(Duration(milliseconds: 5000));
+    Get.to(BlocProvider(
+      create: (ctx) => WeatherBloc(),
+      child: HomeScreen(),
+    ));
+  }
+}
