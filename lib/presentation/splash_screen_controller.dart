@@ -15,9 +15,6 @@ class SplashScreenController extends GetxController {
     await Future.delayed(Duration(milliseconds: 500));
     animate.value = true;
     await Future.delayed(Duration(milliseconds: 5000));
-    Get.to(BlocProvider(
-      create: (ctx) => WeatherBloc(),
-      child: HomeScreen(),
-    ));
+    Get.toNamed('/home');
   }
 }

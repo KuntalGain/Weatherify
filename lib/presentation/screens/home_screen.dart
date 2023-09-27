@@ -5,6 +5,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:weatherify/constants/theme.dart';
+import 'package:weatherify/data/model/weather.dart';
 import 'package:weatherify/domain/bloc/weather_bloc.dart';
 import 'package:weatherify/presentation/screens/search_screen.dart';
 import 'package:weatherify/presentation/widgets/forcast_btn.dart';
@@ -20,8 +21,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  String weatherCondition = "Sunny";
-
   void _showNotificationBottomSheet() {
     showModalBottomSheet<void>(
       context: context,
@@ -66,105 +65,122 @@ class _HomeScreenState extends State<HomeScreen> {
 
   late WeatherBloc weatherBloc;
 
+  String cityName = 'Paris';
+
   @override
   void initState() {
     super.initState();
 
     weatherBloc = WeatherBloc();
     BlocProvider.of<WeatherBloc>(context).add(WeatherInitialEvent());
+    BlocProvider.of<WeatherBloc>(context)
+        .add(RequestWeatherEvent(cityName: cityName));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: getConditions(weatherCondition),
       body: BlocBuilder<WeatherBloc, WeatherState>(
         builder: (context, state) {
           if (state is WeatherInitial) {
-            return Center(child: Text("Please Wait"));
+            return SizedBox();
           } else if (state is WeatherLoadingState) {
             return Center(
               child: CircularProgressIndicator(
-                color: Colors.deepPurple,
+                color: Colors.white,
               ),
             );
-          } else {
-            return SafeArea(
-              child: Column(
-                children: [
-                  // custom app bar
+          } else if (state is WeatherLoadedState) {
+            final Weather weather = state.weatherData;
 
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      // location
-                      Row(
-                        children: [
-                          Image.asset(
-                            'assets/pin.png',
-                            color: Colors.white,
-                            height: 60,
-                            width: 60,
-                          ),
-                          const Text(
-                            'New York',
-                            style: AppTheme.condition,
-                          ),
-                        ],
-                      ),
-                      // Cityname
-                      Row(
-                        children: [
-                          IconButton(
-                            onPressed: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (ctx) => SearchScreen(),
-                                ),
-                              );
-                            },
-                            icon: Icon(
-                              Icons.search,
-                              size: 34,
-                              color: Colors.white,
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: _showNotificationBottomSheet,
-                            child: Image.asset(
-                              'assets/bell.png',
+            return SafeArea(
+              child: Container(
+                color: (state.weatherData.condition == "Sunny" ||
+                        state.weatherData.condition == "Clear" ||
+                        state.weatherData.condition == "Cloudy" ||
+                        state.weatherData.condition == "Overcast" ||
+                        state.weatherData.condition == "Mist" ||
+                        state.weatherData.condition == "Fog" ||
+                        state.weatherData.condition == "Partly cloudy")
+                    ? AppTheme.sunnyColor
+                    : AppTheme.rainyColor,
+                child: Column(
+                  children: [
+                    // custom app bar
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        // location
+                        Row(
+                          children: [
+                            Image.asset(
+                              'assets/pin.png',
                               color: Colors.white,
                               height: 60,
                               width: 60,
                             ),
-                          ),
-                        ],
-                      ),
-                      // notification
-                    ],
-                  ),
+                            Text(
+                              cityName,
+                              style: AppTheme.condition,
+                            ),
+                          ],
+                        ),
+                        // Cityname
+                        Row(
+                          children: [
+                            IconButton(
+                              onPressed: () {
+                                BlocProvider.of<WeatherBloc>(context).add(
+                                  SearchBtnPressedEvent(context: context),
+                                );
+                              },
+                              icon: Icon(
+                                Icons.search,
+                                size: 34,
+                                color: Colors.white,
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: _showNotificationBottomSheet,
+                              child: Image.asset(
+                                'assets/bell.png',
+                                color: Colors.white,
+                                height: 60,
+                                width: 60,
+                              ),
+                            ),
+                          ],
+                        ),
+                        // notification
+                      ],
+                    ),
 
-                  // image
+                    // image
 
-                  SizedBox(
-                    height: 200,
-                    width: 200,
-                    child: getWeatherIcon(weatherCondition),
-                  ),
+                    SizedBox(
+                      height: 200,
+                      width: 200,
+                      child: Image.asset(
+                          getWeatherIcon(state.weatherData.condition)),
+                    ),
 
-                  // weather card
+                    // weather card
 
-                  weatherCard(),
+                    weatherCard(weather),
 
-                  // forcast button
+                    // forcast button
 
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  forcastButton(),
-                ],
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    forcastButton(),
+                  ],
+                ),
               ),
             );
+          } else {
+            return SizedBox();
           }
         },
       ),

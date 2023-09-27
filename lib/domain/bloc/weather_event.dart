@@ -7,4 +7,14 @@ abstract class WeatherEvent {}
 
 class WeatherInitialEvent extends WeatherEvent {}
 
-class RequestWeatherEvent extends WeatherEvent {}
+class RequestWeatherEvent extends WeatherEvent {
+  final String cityName;
+
+  RequestWeatherEvent({required this.cityName});
+}
+
+class SearchBtnPressedEvent extends WeatherEvent {
+  final BuildContext context;
+
+  SearchBtnPressedEvent({required this.context});
+}

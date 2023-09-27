@@ -11,15 +11,20 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          Container(
-            width: 354,
-            height: 57,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15), color: Colors.blue),
-          )
-        ],
+      body: SafeArea(
+        child: Column(
+          children: [
+            Container(
+              width: double.infinity,
+              margin: EdgeInsets.all(10),
+              height: 57,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+                color: Colors.grey,
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
