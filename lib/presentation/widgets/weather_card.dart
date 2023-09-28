@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:weatherify/constants/theme.dart';
+import 'package:weatherify/data/model/weather.dart';
 import 'package:weatherify/presentation/widgets/card_atrribute.dart';
 
 String getMonth() {
@@ -21,7 +22,7 @@ String getMonth() {
   return months[DateTime.now().month];
 }
 
-Widget weatherCard() {
+Widget weatherCard(Weather weather) {
   return Container(
     width: 353,
     height: 335,
@@ -42,20 +43,20 @@ Widget weatherCard() {
         // temp
 
         Text(
-          ' ${24}°',
+          ' ${weather.temp}°',
           style: AppTheme.temperature,
         ),
 
         // condition
 
-        const Text(
-          'Cloudy',
+        Text(
+          weather.condition,
           style: AppTheme.condition,
         ),
         // wind
 
-        cardAttribute('Wind', '10 km/h', 'assets/windy.png'),
-        cardAttribute('Hum ', '54 %', 'assets/hum.png'),
+        cardAttribute('Wind', '${weather.windSpeed} km/h', 'assets/windy.png'),
+        cardAttribute('Hum ', '${weather.humidity} %', 'assets/hum.png'),
 
         // hum
       ],
