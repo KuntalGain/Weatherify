@@ -3,6 +3,7 @@
  // ignore: unused_import
  import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+// ignore: unused_import
 import 'package:weatherify/presentation/screens/home_screen.dart';
  class SplashScreenController  extends GetxController{
   static SplashScreenController get find => Get.find();
@@ -12,6 +13,6 @@ import 'package:weatherify/presentation/screens/home_screen.dart';
 await Future.delayed(Duration(milliseconds: 500));
 animate.value =true;
 await Future.delayed(Duration(milliseconds: 5000));
-Get.to(homescreen());
+Get.to(HomeScreen());
  }
  }

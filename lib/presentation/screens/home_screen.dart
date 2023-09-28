@@ -7,6 +7,7 @@ import 'package:weatherify/constants/theme.dart';
 import 'package:weatherify/presentation/widgets/forcast_btn.dart';
 import 'package:weatherify/presentation/widgets/weather_card.dart';
 import 'package:weatherify/presentation/widgets/weather_condition.dart';
+// ignore: unused_import
 import 'package:weatherify/presentation/widgets/bottom_sheet.dart';
 
 class HomeScreen extends StatefulWidget {
