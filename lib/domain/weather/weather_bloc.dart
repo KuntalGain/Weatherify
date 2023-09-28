@@ -4,13 +4,11 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:meta/meta.dart';
 import 'package:weatherify/data/model/weather.dart';
 
 import 'package:weatherify/data/repos/weather_repository.dart';
 import 'package:weatherify/data/services/weather_search.dart';
 import 'package:weatherify/data/services/weather_services.dart';
-import 'package:weatherify/presentation/screens/search_screen.dart';
 
 part 'weather_event.dart';
 part 'weather_state.dart';

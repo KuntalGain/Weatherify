@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:weatherify/constants/theme.dart';
+import 'package:weatherify/presentation/screens/information_screen.dart';
 
 Widget forcastButton() {
   return Container(
@@ -17,7 +19,9 @@ Widget forcastButton() {
           'Forcast Report',
           style: AppTheme.buttonText,
         ),
-        IconButton(onPressed: () {}, icon: const Icon(Icons.keyboard_arrow_up))
+        IconButton(onPressed: () {
+          Get.to(InformationScreen());
+        }, icon: const Icon(Icons.keyboard_arrow_up))
       ],
     ),
   );
