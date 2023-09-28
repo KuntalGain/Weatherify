@@ -4,7 +4,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
-import 'package:weatherify/domain/bloc/weather_bloc.dart';
+import 'package:weatherify/domain/weather/weather_bloc.dart';
 import 'package:weatherify/presentation/screens/home_screen.dart';
 
 class SplashScreenController extends GetxController {

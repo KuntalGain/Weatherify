@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:weatherify/constants/theme.dart';
 import 'package:weatherify/data/model/weather.dart';
-import 'package:weatherify/domain/bloc/weather_bloc.dart';
+import 'package:weatherify/domain/weather/weather_bloc.dart';
 import 'package:weatherify/presentation/screens/search_screen.dart';
 import 'package:weatherify/presentation/widgets/forcast_btn.dart';
 import 'package:weatherify/presentation/widgets/notification_tile.dart';
@@ -14,7 +14,9 @@ import 'package:weatherify/presentation/widgets/weather_card.dart';
 import 'package:weatherify/presentation/widgets/weather_condition.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  const HomeScreen({super.key, required this.cityname});
+
+  final String cityname;
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -65,8 +67,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   late WeatherBloc weatherBloc;
 
-  String cityName = 'Paris';
-
   @override
   void initState() {
     super.initState();
@@ -74,7 +74,7 @@ class _HomeScreenState extends State<HomeScreen> {
     weatherBloc = WeatherBloc();
     BlocProvider.of<WeatherBloc>(context).add(WeatherInitialEvent());
     BlocProvider.of<WeatherBloc>(context)
-        .add(RequestWeatherEvent(cityName: cityName));
+        .add(RequestWeatherEvent(cityName: widget.cityname));
   }
 
   @override
@@ -121,7 +121,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               width: 60,
                             ),
                             Text(
-                              cityName,
+                              widget.cityname,
                               style: AppTheme.condition,
                             ),
                           ],
