@@ -49,9 +49,11 @@ Widget weatherCard(Weather weather) {
 
         // condition
 
-        Text(
-          weather.condition,
-          style: AppTheme.condition,
+        Center(
+          child: Text(
+            weather.condition,
+            style: AppTheme.condition,
+          ),
         ),
         // wind
 

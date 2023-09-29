@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
         ),
         GetPage(
           name: '/home', // Route for HomeScreen
-          page: () => HomeScreen(cityname: 'kolkata'),
+          page: () => HomeScreen(cityname: 'Kolkata'),
         ),
         GetPage(
           name: '/search',

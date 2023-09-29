@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:weatherify/constants/theme.dart';
+import 'package:weatherify/data/model/forcast.dart';
+import 'package:weatherify/data/repos/forcast_repository.dart';
 import 'package:weatherify/presentation/widgets/forcast_card.dart';
+import 'package:get/get.dart';
 
 class InformationScreen extends StatefulWidget {
   const InformationScreen({super.key, required this.cityname});
@@ -13,6 +16,45 @@ class InformationScreen extends StatefulWidget {
 
 class _InformationScreenState extends State<InformationScreen> {
   DateTime curr_time = DateTime.now();
+  ForcastRepository repo = ForcastRepository();
+
+  List<HourlyForecast> hourlyForcastData = [];
+  List<WeeklyForecast> weeklyForcastData = [];
+
+  Future<void>? hourlyDataFuture;
+  Future<void>? weeklyDataFuture;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    hourlyDataFuture = fetchHourlyWeatherData();
+    weeklyDataFuture = fetchWeeklyWeatherData();
+  }
+
+  Future<void> fetchHourlyWeatherData() async {
+    try {
+      final data = await repo.fetchForcastDataHR(widget.cityname);
+
+      setState(() {
+        hourlyForcastData = data;
+      });
+    } catch (e) {
+      print("error 404 : $e");
+    }
+  }
+
+  Future<void> fetchWeeklyWeatherData() async {
+    try {
+      final data = await repo.fetchForcastDataWK(widget.cityname);
+
+      setState(() {
+        weeklyForcastData = data;
+      });
+    } catch (e) {
+      print("error 404 : $e");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +68,9 @@ class _InformationScreenState extends State<InformationScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 TextButton.icon(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
                   icon: Icon(
                     Icons.arrow_back_ios,
                     size: 35,
@@ -40,14 +84,14 @@ class _InformationScreenState extends State<InformationScreen> {
                     ),
                   ),
                 ),
-                IconButton(
-                  onPressed: () {},
-                  icon: Icon(
-                    Icons.settings_outlined,
-                    size: 35,
-                    color: Colors.white,
-                  ),
-                ),
+                // IconButton(
+                //   onPressed: () {},
+                //   icon: Icon(
+                //     Icons.settings_outlined,
+                //     size: 35,
+                //     color: Colors.white,
+                //   ),
+                // ),
               ],
             ),
             SizedBox(
@@ -71,22 +115,29 @@ class _InformationScreenState extends State<InformationScreen> {
             ),
             Container(
               height: 150,
-              child: Expanded(
-                child: ListView.builder(
-                    itemCount: 24,
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (ctx, idx) {
-                      int time = curr_time.hour + idx;
-
-                      if (time >= 24) {
-                        time = time - 24;
-                      }
-
-                      return (idx == 0)
-                          ? hourlyForcastCard(true, time)
-                          : hourlyForcastCard(false, time);
-                    }),
-              ),
+              padding: EdgeInsets.all(10),
+              child: FutureBuilder(
+                  future: hourlyDataFuture,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                        ),
+                      );
+                    } else if (snapshot.hasError) {
+                      return Text(snapshot.error.toString());
+                    } else {
+                      return Expanded(
+                        child: ListView.builder(
+                            itemCount: hourlyForcastData.length,
+                            scrollDirection: Axis.horizontal,
+                            itemBuilder: (ctx, idx) {
+                              return hourlyForcastCard(hourlyForcastData[idx]);
+                            }),
+                      );
+                    }
+                  }),
             ),
             SizedBox(
               height: 20,
@@ -94,15 +145,30 @@ class _InformationScreenState extends State<InformationScreen> {
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Text(
-                "Next Forcast",
+                "Next 7 Days Forcast",
                 style: AppTheme.condition,
               ),
             ),
-            Expanded(
-                child: ListView.builder(
-              itemCount: 5,
-              itemBuilder: (ctx, idx) => dailyForcastCard(),
-            )),
+            FutureBuilder(
+                future: weeklyDataFuture,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(
+                      child: CircularProgressIndicator(
+                        color: Colors.white,
+                      ),
+                    );
+                  } else if (snapshot.hasError) {
+                    return Text('${snapshot.error}');
+                  } else {
+                    return Expanded(
+                        child: ListView.builder(
+                      itemCount: weeklyForcastData.length,
+                      itemBuilder: (ctx, idx) =>
+                          dailyForcastCard(weeklyForcastData[idx]),
+                    ));
+                  }
+                }),
           ],
         ),
       ),

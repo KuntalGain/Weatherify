@@ -1,32 +1,38 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:weatherify/data/model/forcast.dart';
+import 'package:weatherify/presentation/widgets/weather_condition.dart';
 
 import '../../constants/theme.dart';
 
-Widget hourlyForcastCard(bool isPressed, int time) {
+Widget hourlyForcastCard(HourlyForecast forecast) {
+  String originalTime = forecast.time;
+  DateTime dateTime = DateTime.parse(originalTime);
+  String formattedTime = DateFormat.Hm().format(dateTime); // "8:00"
+
   return Container(
     margin: EdgeInsets.all(4),
+    padding: EdgeInsets.all(5),
     width: 80,
     height: 155,
     decoration: BoxDecoration(
       borderRadius: BorderRadius.circular(20),
-      color: (!isPressed)
-          ? AppTheme.sunnyColor
-          : Color.fromRGBO(255, 255, 255, 0.2),
+      color: Color.fromRGBO(255, 255, 255, 0.2),
     ),
     child: Column(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         Text(
-          '24°C',
+          '${forecast.temperature}°C',
           style: AppTheme.attributes,
         ),
         Container(
           height: 60,
           width: 60,
-          child: Image.asset('assets/sunny.png'),
+          child: Image.asset(getWeatherIcon(forecast.condition)),
         ),
         Text(
-          '${time}.00',
+          '${formattedTime}',
           style: AppTheme.attributes,
         ),
       ],
@@ -34,7 +40,11 @@ Widget hourlyForcastCard(bool isPressed, int time) {
   );
 }
 
-Widget dailyForcastCard() {
+Widget dailyForcastCard(WeeklyForecast forecast) {
+  String originalDate = forecast.date;
+  DateTime dateTime = DateTime.parse(originalDate);
+  String formattedTime = DateFormat.MMMd().format(dateTime);
+
   return Container(
     height: 60,
     margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
@@ -42,16 +52,16 @@ Widget dailyForcastCard() {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
-          '29/9',
+          formattedTime,
           style: AppTheme.attributes,
         ),
         Container(
           height: 60,
           width: 60,
-          child: Image.asset('assets/sunny.png'),
+          child: Image.asset(getWeatherIcon(forecast.condition)),
         ),
         Text(
-          '24°C',
+          '${forecast.temperature}°C',
           style: AppTheme.attributes,
         ),
       ],
