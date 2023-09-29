@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:weatherify/constants/theme.dart';
 import 'package:weatherify/presentation/screens/information_screen.dart';
 
-Widget forcastButton() {
+Widget forcastButton(String query) {
   return Container(
     width: 220,
     height: 64,
@@ -19,9 +19,14 @@ Widget forcastButton() {
           'Forcast Report',
           style: AppTheme.buttonText,
         ),
-        IconButton(onPressed: () {
-          Get.to(InformationScreen());
-        }, icon: const Icon(Icons.keyboard_arrow_up))
+        IconButton(
+            onPressed: () {
+              Get.to(InformationScreen(
+                cityname: query,
+              ));
+              print(query);
+            },
+            icon: const Icon(Icons.keyboard_arrow_up))
       ],
     ),
   );

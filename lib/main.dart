@@ -6,6 +6,7 @@ import 'package:weatherify/constants/theme.dart';
 
 import 'package:weatherify/domain/weather/weather_bloc.dart';
 import 'package:weatherify/presentation/screens/home_screen.dart';
+import 'package:weatherify/presentation/screens/information_screen.dart';
 import 'package:weatherify/presentation/screens/search_screen.dart';
 import 'package:weatherify/presentation/screens/splash_screen.dart';
 
@@ -38,7 +39,12 @@ class MyApp extends StatelessWidget {
           name: '/search',
           page: () => SearchScreen(),
         ),
+        GetPage(name: '/info', page: () => InformationScreen(cityname: '')),
       ],
     );
+
+    // return MaterialApp(
+    //   home: InformationScreen(cityname: 'Kolkata'),
+    // );
   }
 }

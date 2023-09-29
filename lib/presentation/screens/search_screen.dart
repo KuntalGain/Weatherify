@@ -17,11 +17,6 @@ class _SearchScreenState extends State<SearchScreen> {
   final _searchController = TextEditingController();
 
   @override
-  void initState() {
-    // TODO: implement initState
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
@@ -29,13 +24,13 @@ class _SearchScreenState extends State<SearchScreen> {
           children: [
             Container(
               width: double.infinity,
-              margin: EdgeInsets.all(10),
+              margin: const EdgeInsets.all(10),
               height: 57,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15),
                 color: Colors.white,
                 boxShadow: [
-                  BoxShadow(
+                  const BoxShadow(
                     color: Colors.grey,
                     offset: Offset(0.2, 0.5),
                     spreadRadius: 2,
@@ -46,15 +41,15 @@ class _SearchScreenState extends State<SearchScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     width: 10,
                   ),
-                  Icon(
+                  const Icon(
                     Icons.search,
                     color: AppTheme.sunnyColor,
                     size: 30,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 10,
                   ),
                   Expanded(
@@ -62,7 +57,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       enableSuggestions: true,
                       controller: _searchController,
                       keyboardType: TextInputType.name,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         border: InputBorder.none,
                       ),
                       onFieldSubmitted: (value) {
@@ -82,14 +77,14 @@ class _SearchScreenState extends State<SearchScreen> {
                         },
                         child: Container(
                           height: 50,
-                          margin: EdgeInsets.all(10),
+                          margin: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
                             color: AppTheme.stormyColor,
                             borderRadius: BorderRadius.circular(14),
                           ),
                           child: Row(
                             children: [
-                              SizedBox(
+                              const SizedBox(
                                 width: 20,
                               ),
                               Text(
