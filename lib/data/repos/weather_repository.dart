@@ -1,5 +1,7 @@
 // Handle the Response from API
 
+// ignore_for_file: no_leading_underscores_for_local_identifiers
+
 import 'package:weatherify/data/model/weather.dart';
 import 'package:weatherify/data/services/weather_services.dart';
 

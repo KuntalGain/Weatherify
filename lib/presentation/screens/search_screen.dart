@@ -16,7 +16,7 @@ class _SearchScreenState extends State<SearchScreen> {
           children: [
             Container(
               width: double.infinity,
-              margin: EdgeInsets.all(10),
+              margin: const EdgeInsets.all(10),
               height: 57,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15),
