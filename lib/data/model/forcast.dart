@@ -1,12 +1,16 @@
 class HourlyForecast {
-  final String time; // Example: "12 PM"
-  final String condition; // Example: "Partly Cloudy"
-  final double temperature; // Example: 25.0 (in Celsius)
+  final String time;
+  final String condition;
+  final double temperature;
+  final int willRain;
+  final int willSnow;
 
   HourlyForecast({
     required this.time,
     required this.condition,
     required this.temperature,
+    required this.willRain,
+    required this.willSnow,
   });
   factory HourlyForecast.fromJson(Map<String, dynamic> json) {
     return HourlyForecast(
@@ -15,6 +19,8 @@ class HourlyForecast {
       condition: json['condition']['text'] ??
           '', // Replace with the correct key for the condition text
       temperature: (json['temp_c'] ?? 0.0).toDouble(),
+      willRain: json["chance_of_rain"],
+      willSnow: json["chance_of_snow"],
     );
   }
 }

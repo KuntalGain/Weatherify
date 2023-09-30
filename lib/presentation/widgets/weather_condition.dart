@@ -1,6 +1,3 @@
-import 'package:flutter/material.dart';
-import 'package:weatherify/constants/theme.dart';
-
 String getWeatherIcon(String weather) {
   String currentWeather = '';
 

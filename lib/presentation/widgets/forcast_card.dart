@@ -11,13 +11,13 @@ Widget hourlyForcastCard(HourlyForecast forecast) {
   String formattedTime = DateFormat.Hm().format(dateTime); // "8:00"
 
   return Container(
-    margin: EdgeInsets.all(4),
-    padding: EdgeInsets.all(5),
+    margin: const EdgeInsets.all(4),
+    padding: const EdgeInsets.all(5),
     width: 80,
     height: 155,
     decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(20),
-      color: Color.fromRGBO(255, 255, 255, 0.2),
+      borderRadius: BorderRadius.circular(14),
+      color: const Color.fromRGBO(255, 255, 255, 0.2),
     ),
     child: Column(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -26,13 +26,13 @@ Widget hourlyForcastCard(HourlyForecast forecast) {
           '${forecast.temperature}°C',
           style: AppTheme.attributes,
         ),
-        Container(
+        SizedBox(
           height: 60,
           width: 60,
           child: Image.asset(getWeatherIcon(forecast.condition)),
         ),
         Text(
-          '${formattedTime}',
+          formattedTime,
           style: AppTheme.attributes,
         ),
       ],
@@ -47,7 +47,7 @@ Widget dailyForcastCard(WeeklyForecast forecast) {
 
   return Container(
     height: 60,
-    margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+    margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
     child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -55,7 +55,7 @@ Widget dailyForcastCard(WeeklyForecast forecast) {
           formattedTime,
           style: AppTheme.attributes,
         ),
-        Container(
+        SizedBox(
           height: 60,
           width: 60,
           child: Image.asset(getWeatherIcon(forecast.condition)),

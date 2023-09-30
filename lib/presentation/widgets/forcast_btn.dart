@@ -24,7 +24,6 @@ Widget forcastButton(String query) {
               Get.to(InformationScreen(
                 cityname: query,
               ));
-              print(query);
             },
             icon: const Icon(Icons.keyboard_arrow_up))
       ],

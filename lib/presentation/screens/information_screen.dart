@@ -3,7 +3,6 @@ import 'package:weatherify/constants/theme.dart';
 import 'package:weatherify/data/model/forcast.dart';
 import 'package:weatherify/data/repos/forcast_repository.dart';
 import 'package:weatherify/presentation/widgets/forcast_card.dart';
-import 'package:get/get.dart';
 
 class InformationScreen extends StatefulWidget {
   const InformationScreen({super.key, required this.cityname});
@@ -15,6 +14,7 @@ class InformationScreen extends StatefulWidget {
 }
 
 class _InformationScreenState extends State<InformationScreen> {
+  // ignore: non_constant_identifier_names
   DateTime curr_time = DateTime.now();
   ForcastRepository repo = ForcastRepository();
 
@@ -26,7 +26,6 @@ class _InformationScreenState extends State<InformationScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     hourlyDataFuture = fetchHourlyWeatherData();
     weeklyDataFuture = fetchWeeklyWeatherData();
@@ -39,9 +38,8 @@ class _InformationScreenState extends State<InformationScreen> {
       setState(() {
         hourlyForcastData = data;
       });
-    } catch (e) {
-      print("error 404 : $e");
-    }
+      // ignore: empty_catches
+    } catch (e) {}
   }
 
   Future<void> fetchWeeklyWeatherData() async {
@@ -51,9 +49,8 @@ class _InformationScreenState extends State<InformationScreen> {
       setState(() {
         weeklyForcastData = data;
       });
-    } catch (e) {
-      print("error 404 : $e");
-    }
+      // ignore: empty_catches
+    } catch (e) {}
   }
 
   @override
@@ -71,12 +68,12 @@ class _InformationScreenState extends State<InformationScreen> {
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.arrow_back_ios,
                     size: 35,
                     color: Colors.white,
                   ),
-                  label: Text(
+                  label: const Text(
                     'Back',
                     style: TextStyle(
                       fontSize: 30,
@@ -94,7 +91,7 @@ class _InformationScreenState extends State<InformationScreen> {
                 // ),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 30,
             ),
             Padding(
@@ -102,7 +99,7 @@ class _InformationScreenState extends State<InformationScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
+                  const Text(
                     "24-Hour Forcast",
                     style: AppTheme.condition,
                   ),
@@ -115,12 +112,12 @@ class _InformationScreenState extends State<InformationScreen> {
             ),
             Container(
               height: 150,
-              padding: EdgeInsets.all(10),
+              padding: const EdgeInsets.all(10),
               child: FutureBuilder(
                   future: hourlyDataFuture,
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(
+                      return const Center(
                         child: CircularProgressIndicator(
                           color: Colors.white,
                         ),
@@ -139,11 +136,11 @@ class _InformationScreenState extends State<InformationScreen> {
                     }
                   }),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
+            const Padding(
+              padding: EdgeInsets.all(16.0),
               child: Text(
                 "Next 7 Days Forcast",
                 style: AppTheme.condition,
@@ -153,7 +150,7 @@ class _InformationScreenState extends State<InformationScreen> {
                 future: weeklyDataFuture,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(
+                    return const Center(
                       child: CircularProgressIndicator(
                         color: Colors.white,
                       ),

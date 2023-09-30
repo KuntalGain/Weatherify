@@ -4,13 +4,18 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:weatherify/constants/theme.dart';
+import 'package:weatherify/data/model/notification.dart';
 import 'package:weatherify/data/model/weather.dart';
+import 'package:weatherify/data/repos/forcast_repository.dart';
 import 'package:weatherify/domain/weather/weather_bloc.dart';
 import 'package:weatherify/presentation/widgets/forcast_btn.dart';
 import 'package:weatherify/presentation/widgets/notification_tile.dart';
 import 'package:weatherify/presentation/widgets/weather_card.dart';
 import 'package:weatherify/presentation/widgets/weather_condition.dart';
+
+import '../../data/model/forcast.dart';
 // ignore: unused_import
 
 class HomeScreen extends StatefulWidget {
@@ -23,15 +28,18 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  ForcastRepository repository = ForcastRepository();
+
+  List<NotificationModel> notificationList = [];
+
   void _showNotificationBottomSheet() {
     showModalBottomSheet<void>(
       context: context,
       builder: (BuildContext context) {
         return Container(
-          height: 420,
+          height: 80 * (notificationList.length + 1),
           // Customize your bottom sheet content here
           padding: const EdgeInsets.all(16),
-
           decoration: BoxDecoration(
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(25),
@@ -52,10 +60,10 @@ class _HomeScreenState extends State<HomeScreen> {
               // Add your notification content here
               Expanded(
                   child: ListView.builder(
-                itemCount: 3,
+                itemCount: notificationList.length,
                 itemBuilder: (ctx, idx) {
-                  return makeNotificationTile(Icons.sunny,
-                      "Probability of heavy Rain Fall , Please Bring Umbrella with you");
+                  return makeNotificationTile(
+                      Icons.sunny, notificationList[idx]);
                 },
               )),
             ],
@@ -75,11 +83,40 @@ class _HomeScreenState extends State<HomeScreen> {
     BlocProvider.of<WeatherBloc>(context).add(WeatherInitialEvent());
     BlocProvider.of<WeatherBloc>(context)
         .add(RequestWeatherEvent(cityName: widget.cityname));
+
+    fetchHourlyWeatherData();
+  }
+
+  List<HourlyForecast> hourlyForcastData = [];
+
+  Future<void> fetchHourlyWeatherData() async {
+    try {
+      final data = await repository.fetchForcastDataHR(widget.cityname);
+
+      setState(() {
+        hourlyForcastData = data;
+      });
+      // ignore: empty_catches
+    } catch (e) {}
   }
 
   @override
   Widget build(BuildContext context) {
+    for (var item in hourlyForcastData) {
+      String originalTime = item.time;
+      DateTime dateTime = DateTime.parse(originalTime);
+      String formattedTime = DateFormat.Hm().format(dateTime);
+
+      if (item.willRain > 50 && dateTime.hour > 9) {
+        notificationList.add(NotificationModel(
+            alert: 'Probability of Heavy Rain Fall at $formattedTime today',
+            dateTime: DateTime.now()));
+        break;
+      }
+    }
+
     return Scaffold(
+      backgroundColor: AppTheme.sunnyColor,
       body: BlocBuilder<WeatherBloc, WeatherState>(
         builder: (context, state) {
           if (state is WeatherInitial) {
@@ -94,89 +131,78 @@ class _HomeScreenState extends State<HomeScreen> {
             final Weather weather = state.weatherData;
 
             return SafeArea(
-              child: Container(
-                color: (state.weatherData.condition == "Sunny" ||
-                        state.weatherData.condition == "Clear" ||
-                        state.weatherData.condition == "Cloudy" ||
-                        state.weatherData.condition == "Overcast" ||
-                        state.weatherData.condition == "Mist" ||
-                        state.weatherData.condition == "Fog" ||
-                        state.weatherData.condition == "Partly cloudy")
-                    ? AppTheme.sunnyColor
-                    : AppTheme.rainyColor,
-                child: Column(
-                  children: [
-                    // custom app bar
+              child: Column(
+                children: [
+                  // custom app bar
 
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        // location
-                        Row(
-                          children: [
-                            Image.asset(
-                              'assets/pin.png',
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      // location
+                      Row(
+                        children: [
+                          Image.asset(
+                            'assets/pin.png',
+                            color: Colors.white,
+                            height: 60,
+                            width: 60,
+                          ),
+                          Text(
+                            widget.cityname,
+                            style: AppTheme.condition,
+                          ),
+                        ],
+                      ),
+                      // Cityname
+                      Row(
+                        children: [
+                          IconButton(
+                            onPressed: () {
+                              BlocProvider.of<WeatherBloc>(context).add(
+                                SearchBtnPressedEvent(context: context),
+                              );
+                            },
+                            icon: Icon(
+                              Icons.search,
+                              size: 34,
+                              color: Colors.white,
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: _showNotificationBottomSheet,
+                            child: Image.asset(
+                              'assets/bell.png',
                               color: Colors.white,
                               height: 60,
                               width: 60,
                             ),
-                            Text(
-                              widget.cityname,
-                              style: AppTheme.condition,
-                            ),
-                          ],
-                        ),
-                        // Cityname
-                        Row(
-                          children: [
-                            IconButton(
-                              onPressed: () {
-                                BlocProvider.of<WeatherBloc>(context).add(
-                                  SearchBtnPressedEvent(context: context),
-                                );
-                              },
-                              icon: Icon(
-                                Icons.search,
-                                size: 34,
-                                color: Colors.white,
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: _showNotificationBottomSheet,
-                              child: Image.asset(
-                                'assets/bell.png',
-                                color: Colors.white,
-                                height: 60,
-                                width: 60,
-                              ),
-                            ),
-                          ],
-                        ),
-                        // notification
-                      ],
-                    ),
+                          ),
+                        ],
+                      ),
+                      // notification
+                    ],
+                  ),
 
-                    // image
+                  // image
 
-                    SizedBox(
-                      height: 200,
-                      width: 200,
-                      child: Image.asset(
-                          getWeatherIcon(state.weatherData.condition)),
-                    ),
+                  SizedBox(
+                    height: 200,
+                    width: 200,
+                    child: Image.asset(
+                        getWeatherIcon(state.weatherData.condition)),
+                  ),
 
-                    // weather card
+                  // weather card
 
-                    weatherCard(weather),
+                  weatherCard(weather),
 
-                    // forcast button
+                  // forcast button
 
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    forcastButton(widget.cityname),
-                  ],
-                ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  forcastButton(widget.cityname),
+                ],
               ),
             );
           } else {

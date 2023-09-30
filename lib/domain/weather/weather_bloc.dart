@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 import 'package:weatherify/data/model/weather.dart';
 
 import 'package:weatherify/data/repos/weather_repository.dart';
-import 'package:weatherify/data/services/weather_search.dart';
+
 import 'package:weatherify/data/services/weather_services.dart';
 
 part 'weather_event.dart';

@@ -13,7 +13,7 @@ import 'package:weatherify/presentation/screens/splash_screen.dart';
 void main() {
   runApp(BlocProvider(
     create: (context) => WeatherBloc(),
-    child: MyApp(),
+    child: const MyApp(),
   ));
 }
 
@@ -33,13 +33,14 @@ class MyApp extends StatelessWidget {
         ),
         GetPage(
           name: '/home', // Route for HomeScreen
-          page: () => HomeScreen(cityname: 'Kolkata'),
+          page: () => const HomeScreen(cityname: 'Kolkata'),
         ),
         GetPage(
           name: '/search',
-          page: () => SearchScreen(),
+          page: () => const SearchScreen(),
         ),
-        GetPage(name: '/info', page: () => InformationScreen(cityname: '')),
+        GetPage(
+            name: '/info', page: () => const InformationScreen(cityname: '')),
       ],
     );
 

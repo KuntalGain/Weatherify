@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+// ignore: depend_on_referenced_packages
 import 'package:http/http.dart' as http;
 import 'package:weatherify/data/model/forcast.dart';
 
@@ -8,8 +9,8 @@ class ForcastRepository {
   final String baseUrl = 'http://api.weatherapi.com/v1/forecast.json?';
 
   Future<List<HourlyForecast>> fetchForcastDataHR(String query) async {
-    final response = await http.get(
-        Uri.parse('${baseUrl}key=${key}&q=${query}&days=1&aqi=no&alerts=no'));
+    final response = await http
+        .get(Uri.parse('${baseUrl}key=$key&q=$query&days=1&aqi=no&alerts=no'));
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = json.decode(response.body);

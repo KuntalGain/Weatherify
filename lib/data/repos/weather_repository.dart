@@ -9,17 +9,17 @@ class WeatherRepository {
   Future<Weather> getWeather(String cityName) async {
     final weatherData = await apiService.fetchWeatherData(cityName);
 
-    final _temp = weatherData["current"]["temp_c"];
-    final _condition = weatherData["current"]["condition"]["text"];
-    final _windSpeed = weatherData["current"]["wind_kph"];
-    final _humidity = weatherData["current"]["humidity"];
+    final temp = weatherData["current"]["temp_c"];
+    final condition = weatherData["current"]["condition"]["text"];
+    final windSpeed = weatherData["current"]["wind_kph"];
+    final humidity = weatherData["current"]["humidity"];
 
     // Json -> Model data
     final weather = Weather(
-      temp: _temp,
-      condition: _condition,
-      windSpeed: _windSpeed,
-      humidity: _humidity,
+      temp: temp,
+      condition: condition,
+      windSpeed: windSpeed,
+      humidity: humidity,
     );
 
     return weather;
