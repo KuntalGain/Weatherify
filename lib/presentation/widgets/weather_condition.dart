@@ -5,7 +5,7 @@ String getWeatherIcon(String weather) {
   switch (weather) {
     case "Sunny":
     case "clear":
-      currentWeather = 'assets/sunny.jpg';
+      currentWeather = 'assets/sunny.png';
       break;
 
     case "Partly cloudy":
@@ -13,7 +13,7 @@ String getWeatherIcon(String weather) {
     case "Mist":
     case "Overcast":
     case "Cloudy":
-      currentWeather = 'assets/cloudy.jpg';
+      currentWeather = 'assets/cloudy.png';
       break;
 
     case "Patchy rain possible":
@@ -28,7 +28,7 @@ String getWeatherIcon(String weather) {
     case "Patchy light rain":
     case "Light drizzle":
     case "Patchy light drizzle":
-      currentWeather = 'assets/rainy.jpg';
+      currentWeather = 'assets/rainy.png';
       break;
 
     case "Blizzard":
@@ -52,11 +52,11 @@ String getWeatherIcon(String weather) {
     case "Blowing snow":
     case "Patchy freezing drizzle possible":
     case "Patchy snow possible":
-      currentWeather = 'assets/snowy.jpg';
+      currentWeather = 'assets/snowy.png';
       break;
 
     default:
-      currentWeather = 'assets/stormy.jpg';
+      currentWeather = 'assets/stormy.png';
   }
 
   return currentWeather;

@@ -23,12 +23,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      home: SplashScreen(),
+      home: const RainAnimation (),
       initialRoute: '/splash', // Set this to match the route below
       getPages: [
         GetPage(
           name: '/splash', // Use the same name as the initialRoute
-          page: () => SplashScreen(),
+          page: () => const RainAnimation (),
         ),
         GetPage(
           name: '/home', // Route for HomeScreen
