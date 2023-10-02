@@ -4,8 +4,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 import 'package:weatherify/constants/theme.dart';
+import 'package:weatherify/data/database/notification_db.dart';
 import 'package:weatherify/data/model/notification.dart';
 import 'package:weatherify/data/model/weather.dart';
 import 'package:weatherify/data/repos/forcast_repository.dart';
@@ -31,6 +33,11 @@ class _HomeScreenState extends State<HomeScreen> {
   ForcastRepository repository = ForcastRepository();
 
   List<NotificationModel> notificationList = [];
+
+  // reference of Local Storage
+  final _myBox = Hive.box('notification');
+
+  NotificationDB db = NotificationDB();
 
   void _showNotificationBottomSheet() {
     showModalBottomSheet<void>(
@@ -63,7 +70,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 itemCount: notificationList.length,
                 itemBuilder: (ctx, idx) {
                   return makeNotificationTile(
-                      Icons.sunny, notificationList[idx]);
+                    Icons.sunny,
+                    notificationList[idx],
+                  );
                 },
               )),
             ],
@@ -77,7 +86,20 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
+    // if User open App for First Time
+    if (_myBox.get("WEATHERIFY") == null) {
+      db.createInitialData();
+    } else {
+      db.loadData();
+    }
+
     super.initState();
+
+    for (var item in db.alerts) {
+      print("[DEBUG] : ${item.alert}");
+    }
+
+    notificationList = db.alerts.reversed.toList();
 
     weatherBloc = WeatherBloc();
     BlocProvider.of<WeatherBloc>(context).add(WeatherInitialEvent());
@@ -107,10 +129,15 @@ class _HomeScreenState extends State<HomeScreen> {
       DateTime dateTime = DateTime.parse(originalTime);
       String formattedTime = DateFormat.Hm().format(dateTime);
 
-      if (item.willRain > 50 && dateTime.hour > 9) {
-        notificationList.add(NotificationModel(
+      if (item.willRain > 70 && dateTime.hour > 9) {
+        db.alerts.add(
+          NotificationModel(
             alert: 'Probability of Heavy Rain Fall at $formattedTime today',
-            dateTime: DateTime.now()));
+            dateTime: DateFormat('d,MMM').format(DateTime.now()),
+          ),
+        );
+
+        db.updateDB();
         break;
       }
     }
