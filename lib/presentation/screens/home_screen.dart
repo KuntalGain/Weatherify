@@ -4,6 +4,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 import 'package:weatherify/constants/theme.dart';
@@ -11,6 +12,7 @@ import 'package:weatherify/data/database/notification_db.dart';
 import 'package:weatherify/data/model/notification.dart';
 import 'package:weatherify/data/model/weather.dart';
 import 'package:weatherify/data/repos/forcast_repository.dart';
+import 'package:weatherify/data/services/notiification_service.dart';
 import 'package:weatherify/domain/weather/weather_bloc.dart';
 import 'package:weatherify/presentation/widgets/forcast_btn.dart';
 import 'package:weatherify/presentation/widgets/notification_tile.dart';
@@ -87,6 +89,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     // if User open App for First Time
+
     if (_myBox.get("WEATHERIFY") == null) {
       db.createInitialData();
     } else {
@@ -124,12 +127,22 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    bool hasConditionBeenMetToday = false;
+
     for (var item in hourlyForcastData) {
       String originalTime = item.time;
       DateTime dateTime = DateTime.parse(originalTime);
       String formattedTime = DateFormat.Hm().format(dateTime);
 
-      if (item.willRain > 70 && dateTime.hour > 9) {
+      if (item.willRain > 70 &&
+          dateTime.hour <= 24 &&
+          dateTime.hour >= DateTime.now().hour &&
+          !hasConditionBeenMetToday) {
+        // Create a notification
+        NotificationService().showNotification(
+            title: 'Probability of Heavy Rain Fall at $formattedTime today',
+            body: 'Please Bring Umbrella');
+
         db.alerts.add(
           NotificationModel(
             alert: 'Probability of Heavy Rain Fall at $formattedTime today',
@@ -138,6 +151,7 @@ class _HomeScreenState extends State<HomeScreen> {
         );
 
         db.updateDB();
+        hasConditionBeenMetToday = true;
         break;
       }
     }
@@ -151,7 +165,7 @@ class _HomeScreenState extends State<HomeScreen> {
           } else if (state is WeatherLoadingState) {
             return Center(
               child: CircularProgressIndicator(
-                color: AppTheme.sunnyColor,
+                color: Colors.white,
               ),
             );
           } else if (state is WeatherLoadedState) {

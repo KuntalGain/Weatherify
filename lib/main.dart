@@ -6,14 +6,18 @@ import 'package:hive_flutter/adapters.dart';
 // ignore: unused_import
 import 'package:weatherify/constants/theme.dart';
 import 'package:weatherify/data/database/notification_adapter.dart';
+import 'package:weatherify/data/services/notiification_service.dart';
 
 import 'package:weatherify/domain/weather/weather_bloc.dart';
 import 'package:weatherify/presentation/screens/home_screen.dart';
 import 'package:weatherify/presentation/screens/information_screen.dart';
 import 'package:weatherify/presentation/screens/search_screen.dart';
 import 'package:weatherify/presentation/screens/splash_screen.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  NotificationService().initNotification();
   // init hive
   await Hive.initFlutter();
   Hive.registerAdapter(NotificationModelAdapter());
