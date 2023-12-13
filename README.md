@@ -55,3 +55,13 @@ Weatherify is a Flutter-based weather application that allows users to check the
 
 <!-- Add more screenshots and descriptions as needed -->
 
+<h2 align=center>Contributors✨</h2>
+<table>
+    <tr>
+         <td>
+  <a href="https://github.com/KuntalGain/Weatheify/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=KuntalGain/Weatherify" />
+  </a>
+        </td>
+    </tr>
+</table>
